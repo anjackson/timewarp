@@ -10,7 +10,7 @@ Step 1: Install [MITM Proxy]:
 
     $ pip install mitmproxy
 
-Step 2: Run the proxy:
+Step 2: Run the proxy with the timewarp [inline script](http://mitmproxy.org/doc/scripting/inlinescripts.html):
 
     $ mitmdump -s timewarp_proxy.py
 
