@@ -6,7 +6,7 @@ Making it easier to browse the past.
 Quick Start
 -----------
 
-Step 1: Install [MITM Proxy]:
+Step 1: Install [MITM Proxy](http://mitmproxy.org):
 
     $ pip install mitmproxy
 
@@ -19,4 +19,4 @@ Step 3: Set your web browser to use ```servername:8080``` as your web proxy.
 Issues
 ------
 
-- Hard-coded 1998 datestamp.
+- Hard-coded 1998 datestamp!
