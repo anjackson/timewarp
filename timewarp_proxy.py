@@ -1,7 +1,6 @@
 import time
 import datetime
 from memento_client import MementoClient
-
 from mitmproxy.script import concurrent
 
 
@@ -13,8 +12,11 @@ def request(flow):
     print("handle request: %s%s" % (flow.request.host, flow.request.path))
     # http://web.archive.org/web/19981212031357
     if not "id_/http" in flow.request.path:
+        # TO DO Parse any supplied 'Accept-Datetime' header and use that...
         dt = datetime.datetime(2010, 4, 24, 19, 0)
         uri = flow.request.url
+        #timegate = "https://www.webarchive.org.uk/wayback/archive/"
+        #mc = MementoClient(timegate_uri=timegate, check_native_timegate=False)
         mc = MementoClient()
         memento_uri = mc.get_memento_info(uri, dt).get("mementos").get("closest").get("uri")[0]
         flow.request.url = memento_uri
