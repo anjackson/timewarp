@@ -15,6 +15,9 @@ def request(flow):
     if not "id_/http" in flow.request.path:
         # TO DO Parse any supplied 'Accept-Datetime' header and use that...
         dt = datetime.datetime(1996, 1, 1, 1, 0)
+        adt = flow.request.headers.get('Accept-Datetime', None)
+        if adt:
+          dt = datetime.datetime.strptime(adt, '%a, %d %b %Y %H:%M:%S GMT')
         uri = flow.request.url
         timegate = "https://www.webarchive.org.uk/wayback/archive/"
         mc = MementoClient(timegate_uri=timegate, check_native_timegate=False)
@@ -30,6 +33,7 @@ def request(flow):
             # Need to patch the id_ into the url:
             flow.request.url = re.sub(r"\/(\d{14})\/",r"/\1id_/", flow.request.url )
         except Exception as e:
+          print(e)
           pass
 
         print("Getting %s..." % flow.request.url)
