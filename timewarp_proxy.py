@@ -1,3 +1,4 @@
+import re
 import time
 import datetime
 from memento_client import MementoClient
@@ -13,13 +14,26 @@ def request(flow):
     # http://web.archive.org/web/19981212031357
     if not "id_/http" in flow.request.path:
         # TO DO Parse any supplied 'Accept-Datetime' header and use that...
-        dt = datetime.datetime(2010, 4, 24, 19, 0)
+        dt = datetime.datetime(1996, 1, 1, 1, 0)
         uri = flow.request.url
-        #timegate = "https://www.webarchive.org.uk/wayback/archive/"
-        #mc = MementoClient(timegate_uri=timegate, check_native_timegate=False)
-        mc = MementoClient()
-        memento_uri = mc.get_memento_info(uri, dt).get("mementos").get("closest").get("uri")[0]
-        flow.request.url = memento_uri
+        timegate = "https://www.webarchive.org.uk/wayback/archive/"
+        mc = MementoClient(timegate_uri=timegate, check_native_timegate=False)
+        #mc = MementoClient()
+        print("Getting mementos...")
+        try:
+          mementos = mc.get_memento_info(uri, dt).get("mementos")
+          if mementos:
+            if 'closest' in mementos:
+               flow.request.url = mementos.get("closest").get("uri")[0]
+            elif 'memento' in mementos:
+               flow.request.url = mementos.get("closest").get("uri")[0]
+            # Need to patch the id_ into the url:
+            flow.request.url = re.sub(r"\/(\d{14})\/",r"/\1id_/", flow.request.url )
+        except Exception as e:
+          pass
+
+        print("Getting %s..." % flow.request.url)
+            
 
 @concurrent
 def response(flow):
