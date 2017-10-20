@@ -24,6 +24,7 @@ Step 1: Install [MITM Proxy](http://mitmproxy.org) on a suitable server (we'll c
 Step 2: Run the proxy with the timewarp [inline script](http://mitmproxy.org/doc/scripting/inlinescripts.html):
 
     $ mitmdump -s timewarp_proxy.py
+    $ mitmdump -p 8090 -s timewarp_proxy.py --no-upstream-cert
 
 Step 3: Set your web browser to use ```servername:8080``` as your web proxy.
 
