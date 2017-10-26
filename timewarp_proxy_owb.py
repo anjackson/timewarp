@@ -1,16 +1,22 @@
 from mitmproxy.script import concurrent
+from mitmproxy import ctx
+
 
 
 @concurrent
-def request(flow):
-    if flow.request.method == "CONNECT":
-        # If the decision is done by domain, one could also modify the server address here.
-        # We do it after CONNECT here to have the request data available as well.
-        return
-
+def http_connect(flow):
+    ctx.log.info("CONNECT FLOW request: %s" % flow.request)
     # Strip the https so upstream requests are http only:
-    flow.request.scheme = 'http'
+    flow.request.scheme = "http"
     flow.request.port = 80
+    print("CONNECT FLOW request: %s" % flow.request)
 
-    print("Requesting %s..." % flow.request.url)
+@concurrent
+def request(flow):
+    print("FLOW request: %s" % flow.request)
+    # Strip the https so upstream requests are http only:
+    flow.request.scheme = "http"
+    print("FLOW request: %s" % flow.request)
+    flow.live.change_upstream_proxy_server('192.168.45.25:8090')
+
 

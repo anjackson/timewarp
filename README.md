@@ -29,9 +29,17 @@ Step 2: Run the proxy with the timewarp [inline script](http://mitmproxy.org/doc
 Step 3: Set your web browser to use ```servername:8080``` as your web proxy.
 
 
-OTHER MODE
+Proxying to OpenWayback
+-----------------------
+
+The idea is that we should be able to push something like `mitmproxy` on front of OpenWayback's proxy more to allow 
+HTTPS support, with `mitmproxy` handling the connection setup and converting all requests into plain
+HTTP requests to OpenWayback running in proxy mode.
 
     $ mitmdump -U http://openwayback.proxy.mode.service:8090/ -s timewarp_proxy_owb.py
+
+Sadly this seems not to work, but looking at [this issue](https://github.com/mitmproxy/mitmproxy/issues/2329) and 
+related commits etc. it seems future versions may be able to do this.
 
 Issues
 ------
