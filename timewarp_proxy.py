@@ -41,14 +41,14 @@ def get_via_mementos(uri, dt):
     return uri
 
 # This is faster...
-def get_via_timegate(uri,dt):
+def get_via_timegate(uri,dt,ua):
     # Find the location header to get the new URI from the timegate:
     #print("Getting memento for %s ..." % uri)
     uri = "%s%s" % (timegate, uri)
-    #print("Getting memento using %s ..." % uri)
+    print("Getting memento at %s using %s ..." % (dt, uri))
 
     # Find the nearest match:
-    headers = {'Accept-Datetime': dt, 'User-Agent': 'Timewarp Web Archive Pseudo-proxy (a UK Web Archive experiment)'}
+    headers = {'Accept-Datetime': dt, 'User-Agent': '%s +viaTimewarpWebProxy' % ua}
     r = requests.head(uri, headers=headers, allow_redirects=True )
     # Get the final URL
     uri = r.url
@@ -71,9 +71,10 @@ def request(flow):
         # TO DO Parse any supplied 'Accept-Datetime' header and use that...
         dt = datetime.datetime(1996, 1, 1, 1, 0)
         adt = flow.request.headers.get('Accept-Datetime', None)
+        ua = flow.request.headers.get('User-Agent', None)
         if adt:
           dt = datetime.datetime.strptime(adt, '%a, %d %b %Y %H:%M:%S GMT')
-          flow.request.url = get_via_timegate(uri, adt)
+          flow.request.url = get_via_timegate(uri, adt, ua)
           print("Re-routing to %s for %s..." % (flow.request.url, uri))
 
     print("Requesting %s..." % flow.request.url)

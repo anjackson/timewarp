@@ -29,6 +29,10 @@ Step 2: Run the proxy with the timewarp [inline script](http://mitmproxy.org/doc
 Step 3: Set your web browser to use ```servername:8080``` as your web proxy.
 
 
+OTHER MODE
+
+    $ mitmdump -U http://openwayback.proxy.mode.service:8090/ -s timewarp_proxy_owb.py
+
 Issues
 ------
 
